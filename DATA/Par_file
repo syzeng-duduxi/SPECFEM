@@ -41,11 +41,11 @@ NPROC_ETA                       = __NPROC__
 
 
 ###################################################################################################### 
-MODEL                           = 1D_transversely_isotropic_prem
+MODEL                           = __MODEL__
 
 # parameters describing the Earth model
-OCEANS                          = .false.
-TOPOGRAPHY                      = .false.
+OCEANS                          = __OCEAN__
+TOPOGRAPHY                      = __TOPOG__
 ELLIPTICITY                     = __ELLIP__
 ######################################################################################################
 
