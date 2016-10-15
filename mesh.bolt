@@ -1,0 +1,19 @@
+#!/bin/bash --login
+#PBS -l select=__NNODE__
+#PBS -N __JOBNAME__
+#PBS -A n08
+#PBS -l walltime=__WALLTIME__
+
+export nproc=__NPROC__
+
+if [ ${nproc} -lt 24 ]; then
+    export nppn=$nproc
+else
+    export nppn=24    
+fi
+
+export PBS_O_WORKDIR=/work/n08/n08/kuangdai/SPECFEM_RUNS/__SUBDIR__/__JOBNAME__
+cd ${PBS_O_WORKDIR}
+
+aprun -n ${nproc} -N ${nppn} ./bin/xmeshfem3D 
+qsub spec.bolt
