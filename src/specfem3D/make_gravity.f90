@@ -66,7 +66,7 @@
   R771 = 5600000.d0
   RTOPDDOUBLEPRIME = 3630000.d0
   RCMB = 3480000.d0
-  RICB = 1221000.d0
+  RICB = 1221500.d0
 
 ! non-dimensionalize
   r_icb = RICB/R_EARTH_GRAVITY
