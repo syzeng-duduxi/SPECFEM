@@ -115,7 +115,7 @@
   integer, parameter :: RESOLUTION_TOPO_FILE = 4
 ! pathname of the topography file
 ! character (len=*), parameter :: PATHNAME_TOPO_FILE = 'DATA/topo_bathy/topo_bathy_etopo4_from_etopo2_subsampled.bin'
-  character (len=*), parameter :: PATHNAME_TOPO_FILE = 'DATA/topo_bathy/topo_bathy_etopo4_smoothed_window_7.bin'
+  character (len=*), parameter :: PATHNAME_TOPO_FILE = 'DATA/topo_bathy/topo_bathy_crust1.bin'
 
 !--- ETOPO2 2-minute model
 ! size of topography and bathymetry file
