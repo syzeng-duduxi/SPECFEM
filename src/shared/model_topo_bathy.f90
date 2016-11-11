@@ -274,7 +274,7 @@
   value = dble(ibathy_topo(ilon,ilat))*ratio_lon * ratio_lat &
           + dble(ibathy_topo(ilon_next,ilat))*(1.d0-ratio_lon) * ratio_lat &
           + dble(ibathy_topo(ilon,ilat_next))*ratio_lon * (1.d0-ratio_lat) &
-          + dble(ibathy_topo(ilon_next,ilat_next))*(1.d0-ratio_lon) * (1.d0-ratio_lat) &
+          + dble(ibathy_topo(ilon_next,ilat_next))*(1.d0-ratio_lon) * (1.d0-ratio_lat)
   
 
 !   ! initializes elevation
