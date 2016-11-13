@@ -1,13 +1,13 @@
-PDE 2011  8 23 17 51  4.60  37.9400  -77.9300   6.0 5.9 5.8 JAPAN
-event name:         201108231751A  
-time shift:         0.00
-half duration:      0.00
-latitude:           37.0052
-longitude:          142.4525
-depth:              20.0000
-Mrr:                -4.861e+18
-Mtt:                1.90e+17
-Mpp:                4.671e+18
-Mrt:                -1.622e+18
-Mrp:                -4.833e+18
-Mtp:                2.627e+18
+PDE 2011  8 23 17 51  4.60  37.9400  -77.9300   6.0 5.9 5.8 VIRGINIA                                
+event name:     201108231751A  
+time shift:      0.00
+half duration:   0.00
+latitude:       37.9100
+longitude:     -77.9300
+depth:          12.0000
+Mrr:       4.710000e+24
+Mtt:       3.810000e+22
+Mpp:      -4.740000e+24
+Mrt:       3.990000e+23
+Mrp:      -8.050000e+23
+Mtp:      -1.230000e+24
