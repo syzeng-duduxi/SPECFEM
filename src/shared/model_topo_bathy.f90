@@ -255,8 +255,8 @@
   
   ! latitude
   colat = 90.d0 - xlat
-  ilat = int(colat / samples_per_degree_topo)
-  lat_corner = ilat * samples_per_degree_topo
+  ilat = int(colat / samples_per_degree_topo) + 1
+  lat_corner = (ilat - 1) * samples_per_degree_topo
   ratio_lat = 1. - (colat - lat_corner) / samples_per_degree_topo
   ilat_next = ilat + 1
   if (ilat_next > NY_BATHY) ilat_next = NY_BATHY
@@ -265,8 +265,8 @@
   xlo = xlon
   if (xlo < 0.d0) xlo = xlo + 360.d0
   if (xlo > 360.d0) xlo = xlo - 360.d0
-  ilon = int(xlo / samples_per_degree_topo)
-  lon_corner = ilon * samples_per_degree_topo
+  ilon = int(xlo / samples_per_degree_topo) + 1
+  lon_corner = (ilon - 1) * samples_per_degree_topo
   ratio_lon = 1. - (xlo - lon_corner) / samples_per_degree_topo
   ilon_next = ilon + 1
   if (ilon_next > NX_BATHY) ilon_next = 1
