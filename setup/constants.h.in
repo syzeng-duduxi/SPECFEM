@@ -110,12 +110,12 @@
 
 !---  ETOPO4 4-minute model
 ! size of topography and bathymetry file
-  integer, parameter :: NX_BATHY = 5400,NY_BATHY = 2701
+  integer, parameter :: NX_BATHY = 5400,NY_BATHY = 2700
 ! resolution of topography file in minutes
   integer, parameter :: RESOLUTION_TOPO_FILE = 4
 ! pathname of the topography file
-! character (len=*), parameter :: PATHNAME_TOPO_FILE = 'DATA/topo_bathy/topo_bathy_etopo4_from_etopo2_subsampled.bin'
-  character (len=*), parameter :: PATHNAME_TOPO_FILE = 'DATA/topo_bathy/topo_bathy_crust1_both_poles.bin'
+character (len=*), parameter :: PATHNAME_TOPO_FILE = 'DATA/topo_bathy/topo_bathy_etopo4_from_etopo2_subsampled.bin'
+! character (len=*), parameter :: PATHNAME_TOPO_FILE = 'DATA/topo_bathy/topo_bathy_crust1_both_poles.bin'
 
 !--- ETOPO2 2-minute model
 ! size of topography and bathymetry file

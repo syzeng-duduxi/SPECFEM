@@ -246,65 +246,100 @@
   integer, dimension(NX_BATHY,NY_BATHY),intent(in) :: ibathy_topo
 
   ! local parameters
-  integer :: iadd1,iel1
+  integer :: ilat, ilon, ilat_next, ilon_next
   double precision :: samples_per_degree_topo
-  double precision :: xlo
+  double precision :: colat, xlo
   double precision :: lon_corner,lat_corner,ratio_lon,ratio_lat
-
-  ! initializes elevation
-  value = ZERO
-
-  ! longitude within range [0,360] degrees
+  
+  samples_per_degree_topo = dble(RESOLUTION_TOPO_FILE) / 60.d0
+  
+  ! latitude
+  colat = 90.d0 - xlat
+  if (colat < 0.d0) colat = 0.d0
+  if (colat >= 180.d0) colat = 179.999999d0
+  ilat = int(colat / samples_per_degree_topo) + 1
+  lat_corner = (ilat - 1) * samples_per_degree_topo
+  ratio_lat = 1. - (colat - lat_corner) / samples_per_degree_topo
+  ilat_next = ilat + 1
+  if (ilat_next > NY_BATHY) ilat_next = NY_BATHY
+  if (ilat_next < 1) ilat_next = 1
+  if (ilat > NY_BATHY) ilat = NY_BATHY
+  if (ilat < 1) ilat = 1
+  
+  ! longitude
   xlo = xlon
   if (xlo < 0.d0) xlo = xlo + 360.d0
-  if (xlo > 360.d0) xlo = xlo - 360.d0
+  if (xlo >= 360.d0) xlo = xlo - 360.d0
+  ilon = int(xlo / samples_per_degree_topo) + 1
+  lon_corner = (ilon - 1) * samples_per_degree_topo
+  ratio_lon = 1. - (xlo - lon_corner) / samples_per_degree_topo
+  ilon_next = ilon + 1
+  if (ilon_next > NX_BATHY) ilon_next = 1
+  if (ilon_next < 1) ilon_next = 1
+  if (ilon > NX_BATHY) ilon = 1
+  if (ilon < 1) ilon = 1
+  
+  
+  value = dble(ibathy_topo(ilon,ilat))*ratio_lon * ratio_lat &
+          + dble(ibathy_topo(ilon_next,ilat))*(1.d0-ratio_lon) * ratio_lat &
+          + dble(ibathy_topo(ilon,ilat_next))*ratio_lon * (1.d0-ratio_lat) &
+          + dble(ibathy_topo(ilon_next,ilat_next))*(1.d0-ratio_lon) * (1.d0-ratio_lat)
+  
 
-  ! compute number of samples per degree
-  samples_per_degree_topo = dble(RESOLUTION_TOPO_FILE) / 60.d0
-
-  ! compute offset in data file and avoid edge effects
-  iadd1 = 1 + int((90.d0-xlat)/samples_per_degree_topo)
-  if (iadd1 < 1) iadd1 = 1
-  if (iadd1 > NY_BATHY) iadd1 = NY_BATHY
-
-  iel1 = int(xlo/samples_per_degree_topo)
-  if (iel1 <= 0 .or. iel1 > NX_BATHY) iel1 = NX_BATHY
-
-! Use bilinear interpolation rather nearest point interpolation
-
-  ! convert integer value to double precision
-  !  value = dble(ibathy_topo(iel1,iadd1))
-
-  lon_corner=iel1*samples_per_degree_topo
-  lat_corner=90.d0-iadd1*samples_per_degree_topo
-
-  ratio_lon = (xlo-lon_corner)/samples_per_degree_topo
-  ratio_lat = (xlat-lat_corner)/samples_per_degree_topo
-
-  if (ratio_lon<0.0) ratio_lon=0.0
-  if (ratio_lon>1.0) ratio_lon=1.0
-  if (ratio_lat<0.0) ratio_lat=0.0
-  if (ratio_lat>1.0) ratio_lat=1.0
-
-  ! convert integer value to double precision
-  if (iadd1 <= NY_BATHY-1 .and. iel1 <= NX_BATHY-1) then
-    ! interpolates for points within boundaries
-    value = dble(ibathy_topo(iel1,iadd1))*(1-ratio_lon)*(1.-ratio_lat) &
-            + dble(ibathy_topo(iel1+1,iadd1))*ratio_lon*(1.-ratio_lat) &
-            + dble(ibathy_topo(iel1+1,iadd1+1))*ratio_lon*ratio_lat &
-            + dble(ibathy_topo(iel1,iadd1+1))*(1.-ratio_lon)*ratio_lat
-
-  else if (iadd1 <= NY_BATHY-1 .and. iel1 == NX_BATHY) then
-    ! interpolates for points on longitude border
-    value = dble(ibathy_topo(iel1,iadd1))*(1-ratio_lon)*(1.-ratio_lat) &
-            + dble(ibathy_topo(1,iadd1))*ratio_lon*(1.-ratio_lat) &
-            + dble(ibathy_topo(1,iadd1+1))*ratio_lon*ratio_lat &
-            + dble(ibathy_topo(iel1,iadd1+1))*(1.-ratio_lon)*ratio_lat
-
-  else
-    ! for points on latitude boundaries
-    value = dble(ibathy_topo(iel1,iadd1))
-  endif
+!   ! initializes elevation
+!   value = ZERO
+! 
+!   ! longitude within range [0,360] degrees
+!   xlo = xlon
+!   if (xlo < 0.d0) xlo = xlo + 360.d0
+!   if (xlo > 360.d0) xlo = xlo - 360.d0
+! 
+!   ! compute number of samples per degree
+!   samples_per_degree_topo = dble(RESOLUTION_TOPO_FILE) / 60.d0
+! 
+!   ! compute offset in data file and avoid edge effects
+!   iadd1 = 1 + int((90.d0-xlat)/samples_per_degree_topo)
+!   if (iadd1 < 1) iadd1 = 1
+!   if (iadd1 > NY_BATHY) iadd1 = NY_BATHY
+! 
+!   iel1 = int(xlo/samples_per_degree_topo)
+!   if (iel1 <= 0 .or. iel1 > NX_BATHY) iel1 = NX_BATHY
+! 
+! ! Use bilinear interpolation rather nearest point interpolation
+! 
+!   ! convert integer value to double precision
+!   !  value = dble(ibathy_topo(iel1,iadd1))
+! 
+!   lon_corner=iel1*samples_per_degree_topo
+!   lat_corner=90.d0-iadd1*samples_per_degree_topo
+! 
+!   ratio_lon = (xlo-lon_corner)/samples_per_degree_topo
+!   ratio_lat = (xlat-lat_corner)/samples_per_degree_topo
+! 
+!   if (ratio_lon<0.0) ratio_lon=0.0
+!   if (ratio_lon>1.0) ratio_lon=1.0
+!   if (ratio_lat<0.0) ratio_lat=0.0
+!   if (ratio_lat>1.0) ratio_lat=1.0
+! 
+!   ! convert integer value to double precision
+!   if (iadd1 <= NY_BATHY-1 .and. iel1 <= NX_BATHY-1) then
+!     ! interpolates for points within boundaries
+!     value = dble(ibathy_topo(iel1,iadd1))*(1-ratio_lon)*(1.-ratio_lat) &
+!             + dble(ibathy_topo(iel1+1,iadd1))*ratio_lon*(1.-ratio_lat) &
+!             + dble(ibathy_topo(iel1+1,iadd1+1))*ratio_lon*ratio_lat &
+!             + dble(ibathy_topo(iel1,iadd1+1))*(1.-ratio_lon)*ratio_lat
+! 
+!   else if (iadd1 <= NY_BATHY-1 .and. iel1 == NX_BATHY) then
+!     ! interpolates for points on longitude border
+!     value = dble(ibathy_topo(iel1,iadd1))*(1-ratio_lon)*(1.-ratio_lat) &
+!             + dble(ibathy_topo(1,iadd1))*ratio_lon*(1.-ratio_lat) &
+!             + dble(ibathy_topo(1,iadd1+1))*ratio_lon*ratio_lat &
+!             + dble(ibathy_topo(iel1,iadd1+1))*(1.-ratio_lon)*ratio_lat
+! 
+!   else
+!     ! for points on latitude boundaries
+!     value = dble(ibathy_topo(iel1,iadd1))
+!   endif
 
   end subroutine get_topo_bathy
 

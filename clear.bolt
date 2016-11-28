@@ -1,9 +1,10 @@
 #!/bin/bash --login
 #PBS -l select=serial=true:ncpus=1
-#PBS -l walltime=00:20:00
+#PBS -l walltime=02:00:00
 #PBS -A n08
 
 export PBS_O_WORKDIR=/work/n08/n08/kuangdai/SPECFEM_RUNS/__SUBDIR__/__JOBNAME__
 cd ${PBS_O_WORKDIR}
 
+tar cvfj __SUBDIR_____JOBNAME__.tar.bz2 ./OUTPUT_FILES
 find ./DATABASES_MPI/ -type f -delete

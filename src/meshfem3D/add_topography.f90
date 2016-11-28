@@ -31,7 +31,7 @@
     NGNOD,NX_BATHY,NY_BATHY,R_EARTH,R_UNIT_SPHERE, &
     PI_OVER_TWO,RADIANS_TO_DEGREES,TINYVAL,ONE
 
-  use meshfem3D_par,only: RMOHO
+  use meshfem3D_par,only: R220
 
   implicit none
 
@@ -66,10 +66,10 @@
     elevation = elevation / R_EARTH
 
     ! stretching topography between d220 and the surface
-    if (r < RMOHO / R_EARTH) then
+    if (r < R220 / R_EARTH) then
         gamma = 0.d0
     else
-        gamma = (r - RMOHO/R_EARTH) / (R_UNIT_SPHERE - RMOHO/R_EARTH)
+        gamma = (r - R220/R_EARTH) / (R_UNIT_SPHERE - R220/R_EARTH)
     endif
 
     ! add elevation to all the points of that element
@@ -97,7 +97,7 @@
                                 ibathy_topo)
 
   use constants
-  use meshfem3D_par,only: RMOHO
+  use meshfem3D_par,only: R220
 
   implicit none
 
@@ -132,7 +132,7 @@
         elevation = elevation / R_EARTH
 
         ! stretching topography between d220 and the surface
-        gamma = (r - RMOHO/R_EARTH) / (R_UNIT_SPHERE - RMOHO/R_EARTH)
+        gamma = (r - R220/R_EARTH) / (R_UNIT_SPHERE - R220/R_EARTH)
 
         ! add elevation to all the points of that element
         ! also make sure factor makes sense
@@ -140,8 +140,8 @@
           call exit_MPI(myrank,'incorrect value of factor for topography GLL points')
         endif
 
-        ! since not all GLL points are exactly at RMOHO, use a small
-        ! tolerance for RMOHO detection
+        ! since not all GLL points are exactly at R220, use a small
+        ! tolerance for R220 detection
         if (abs(gamma) < SMALLVAL) then
           gamma = 0.d0
         endif
