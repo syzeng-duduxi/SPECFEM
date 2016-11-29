@@ -66,11 +66,7 @@
     elevation = elevation / R_EARTH
 
     ! stretching topography between d220 and the surface
-    if (r < R220 / R_EARTH) then
-        gamma = 0.d0
-    else
-        gamma = (r - R220/R_EARTH) / (R_UNIT_SPHERE - R220/R_EARTH)
-    endif
+    gamma = (r - R220/R_EARTH) / (R_UNIT_SPHERE - R220/R_EARTH)
 
     ! add elevation to all the points of that element
     ! also make sure gamma makes sense

@@ -251,6 +251,46 @@
   double precision :: xlo
   double precision :: lon_corner,lat_corner,ratio_lon,ratio_lat
 
+  integer :: ilat, ilon, ilat_next, ilon_next
+  double precision :: colat
+
+if (NY_BATHY == 2701) then 
+    
+    samples_per_degree_topo = dble(RESOLUTION_TOPO_FILE) / 60.d0
+    
+    ! latitude
+    colat = 90.d0 - xlat
+    if (colat < 0.d0) colat = 0.d0
+    if (colat >= 180.d0) colat = 179.999999d0
+    ilat = int(colat / samples_per_degree_topo) + 1
+    lat_corner = (ilat - 1) * samples_per_degree_topo
+    ratio_lat = 1. - (colat - lat_corner) / samples_per_degree_topo
+    ilat_next = ilat + 1
+    if (ilat_next > NY_BATHY) ilat_next = NY_BATHY
+    if (ilat_next < 1) ilat_next = 1
+    if (ilat > NY_BATHY) ilat = NY_BATHY
+    if (ilat < 1) ilat = 1
+    
+    ! longitude
+    xlo = xlon
+    if (xlo < 0.d0) xlo = xlo + 360.d0
+    if (xlo >= 360.d0) xlo = xlo - 360.d0
+    ilon = int(xlo / samples_per_degree_topo) + 1
+    lon_corner = (ilon - 1) * samples_per_degree_topo
+    ratio_lon = 1. - (xlo - lon_corner) / samples_per_degree_topo
+    ilon_next = ilon + 1
+    if (ilon_next > NX_BATHY) ilon_next = 1
+    if (ilon_next < 1) ilon_next = 1
+    if (ilon > NX_BATHY) ilon = 1
+    if (ilon < 1) ilon = 1
+    
+    
+    value = dble(ibathy_topo(ilon,ilat))*ratio_lon * ratio_lat &
+            + dble(ibathy_topo(ilon_next,ilat))*(1.d0-ratio_lon) * ratio_lat &
+            + dble(ibathy_topo(ilon,ilat_next))*ratio_lon * (1.d0-ratio_lat) &
+            + dble(ibathy_topo(ilon_next,ilat_next))*(1.d0-ratio_lon) * (1.d0-ratio_lat)
+        
+else        
   ! initializes elevation
   value = ZERO
 
@@ -304,6 +344,8 @@
   else
     ! for points on latitude boundaries
     value = dble(ibathy_topo(iel1,iadd1))
+  endif
+  
   endif
 
   end subroutine get_topo_bathy

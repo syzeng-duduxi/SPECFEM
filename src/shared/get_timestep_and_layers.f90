@@ -507,12 +507,15 @@
 ! multiply that time step by this ratio when LDDRK is on and when flag INCREASE_CFL_FOR_LDDRK is true.
   if (USE_LDDRK .and. INCREASE_CFL_FOR_LDDRK) DT = DT * RATIO_BY_WHICH_TO_INCREASE_IT
 
+  if (__ENFORCE_ATT__) then
+      MIN_ATTENUATION_PERIOD = 1
+      MAX_ATTENUATION_PERIOD = 1000
+  endif
+  
   write(*,*) '!! AXISEM !!'
   write(*,*) DT 
   write(*,*) MIN_ATTENUATION_PERIOD
   write(*,*) MAX_ATTENUATION_PERIOD
-  MIN_ATTENUATION_PERIOD = 1
-  MAX_ATTENUATION_PERIOD = 1000
   write(*,*) '!! AXISEM !!'
 
   end subroutine get_timestep_and_layers
