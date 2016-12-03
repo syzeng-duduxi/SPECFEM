@@ -1,7 +1,7 @@
 #!/bin/bash --login
 #PBS -l select=__NNODE__
 #PBS -N __JOBNAME__
-#PBS -A n08
+#PBS -A __ACCOUNT__
 #PBS -l walltime=__WALLTIME__
 
 export nproc=__NPROC__
@@ -12,7 +12,7 @@ else
     export nppn=24    
 fi
 
-export PBS_O_WORKDIR=__wdir__/SPECFEM_RUNS/__SUBDIR__/__JOBNAME__
+export PBS_O_WORKDIR=/work/__WORKDIR__/SPECFEM_RUNS/__SUBDIR__/__JOBNAME__
 cd ${PBS_O_WORKDIR}
 
 aprun -n ${nproc} -N ${nppn} ./bin/xmeshfem3D 

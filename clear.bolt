@@ -1,9 +1,9 @@
 #!/bin/bash --login
 #PBS -l select=serial=true:ncpus=1
 #PBS -l walltime=02:00:00
-#PBS -A n08
+#PBS -A __ACCOUNT__
 
-export PBS_O_WORKDIR=__wdir__/SPECFEM_RUNS/__SUBDIR__/__JOBNAME__
+export PBS_O_WORKDIR=/work/__WORKDIR__/SPECFEM_RUNS/__SUBDIR__/__JOBNAME__
 cd ${PBS_O_WORKDIR}
 
 tar cvfj __SUBDIR_____JOBNAME__.tar.bz2 ./OUTPUT_FILES
