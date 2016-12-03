@@ -12,7 +12,7 @@ else
     export nppn=24    
 fi
 
-export PBS_O_WORKDIR=/work/n08/n08/kuangdai/SPECFEM_RUNS/__SUBDIR__/__JOBNAME__
+export PBS_O_WORKDIR=__wdir__/SPECFEM_RUNS/__SUBDIR__/__JOBNAME__
 cd ${PBS_O_WORKDIR}
 
 aprun -n ${nproc} -N ${nppn} ./bin/xmeshfem3D 
