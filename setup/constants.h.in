@@ -882,3 +882,23 @@ character (len=*), parameter :: PATHNAME_TOPO_FILE = 'DATA/topo_bathy/__TOP_FILE
     (/0.0_CUSTOM_REAL,0.032918605146_CUSTOM_REAL,0.249351723343_CUSTOM_REAL,&
       0.466911705055_CUSTOM_REAL,0.582030414044_CUSTOM_REAL,0.847252983783_CUSTOM_REAL/)
 
+
+!!-----------------------------------------------------------
+!! bubble
+!!-----------------------------------------------------------
+
+logical, parameter :: mBubble = __bubble__
+
+! center of the bubble
+double precision, parameter :: mDepth = 1200.
+double precision, parameter :: mTheta = 92.3389 
+double precision, parameter :: mPhi   = 320.8
+
+! Gaussian parameters
+double precision, parameter :: mRadius = __bubble_rad__
+double precision, parameter :: mHWHM = mRadius / 5.
+
+double precision, parameter :: mMax_vs = __bubble_dvs__
+double precision, parameter :: mMax_vp = mMax_vs * .5
+double precision, parameter :: mMax_rh = mMax_vs * .3
+

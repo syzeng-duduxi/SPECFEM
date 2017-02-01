@@ -381,6 +381,16 @@
   double precision :: dvs,drho,vp,vs
   real(kind=4) :: xcolat,xlon,xrad,dvpv,dvph,dvsv,dvsh
   logical :: found_crust,suppress_mantle_extension
+  
+  double precision :: r_target, r_bubble
+  double precision :: t_target, t_bubble
+  double precision :: p_target, p_bubble
+  double precision :: x_target, x_bubble
+  double precision :: y_target, y_bubble
+  double precision :: z_target, z_bubble
+  double precision :: distance
+  double precision :: stddev, gaussian
+  
 
   ! initializes perturbation values
   dvs = ZERO
@@ -450,6 +460,48 @@
         vsv=vsv*(1.0d0+dvs)
         vsh=vsh*(1.0d0+dvs)
         rho=rho*(1.0d0+drho)
+        
+        if (mBubble) then 
+            
+            ! find the distance between bubble center and target point
+            r_target = r_used * R_EARTH
+            t_target = theta
+            p_target = phi
+            
+            r_bubble = R_EARTH - mDepth * 1000.
+            t_bubble = mTheta * DEGREES_TO_RADIANS
+            p_bubble = mPhi * DEGREES_TO_RADIANS
+            
+            x_target = r_target * dsin(t_target) * dcos(p_target)
+            y_target = r_target * dsin(t_target) * dsin(p_target)
+            z_target = r_target * dcos(t_target)
+            
+            x_bubble = r_bubble * dsin(t_bubble) * dcos(p_bubble)
+            y_bubble = r_bubble * dsin(t_bubble) * dsin(p_bubble)
+            z_bubble = r_bubble * dcos(t_bubble)
+            
+            distance = dsqrt((x_target - x_bubble) ** 2 + (y_target - y_bubble) ** 2 + (z_target - z_bubble) ** 2)
+            
+            ! treat as center if inside bubble
+            distance = distance - mRadius * 1000. 
+            if (distance < 0.) distance = 0.
+            
+            ! outside range
+            if (distance <= 4. * mHWHM * 1000.) then
+            
+                ! compute Gaussian
+                stddev = mHWHM * 1000. / sqrt(2. * log(2.));
+                gaussian = exp(-distance * distance / (stddev * stddev * 2.));
+            
+                ! set perturbations    
+                vpv=vpv*(1.0d0+gaussian * mMax_vp)
+                vph=vph*(1.0d0+gaussian * mMax_vp)
+                vsv=vsv*(1.0d0+gaussian * mMax_vs)
+                vsh=vsh*(1.0d0+gaussian * mMax_vs)
+                rho=rho*(1.0d0+gaussian * mMax_rh)
+            endif
+            
+        endif
 
       case (THREE_D_MODEL_SEA99_JP3D)
         ! sea99 + jp3d1994
