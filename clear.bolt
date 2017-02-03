@@ -1,6 +1,6 @@
 #!/bin/bash --login
 #PBS -l select=serial=true:ncpus=1
-#PBS -l walltime=02:00:00
+#PBS -l walltime=05:00:00
 #PBS -A __ACCOUNT__
 
 export PBS_O_WORKDIR=/work/__WORKDIR__/SPECFEM_RUNS/__SUBDIR__/__JOBNAME__
